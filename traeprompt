@@ -1,0 +1,7 @@
+感知阶段： 扫描工程根目录，识别 package.json、main.rs、contracts/ 等关键文件，确定技术栈。
+
+挖掘阶段： 寻找代码中的 Algorithm、Optimization、Security 相关逻辑，禁止只列出文件夹，必须提取出 3 个“硬核技术卖点”。
+
+可视化阶段： 必须包含一个 Mermaid 流程图，展示数据从输入到处理的流动。
+
+文风控制： 设定为 "Top Tier Global Hacker"，使用英语，排版精美，必须包含 Shields.io 动态图标。
