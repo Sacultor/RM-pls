@@ -9,7 +9,7 @@ Hardcore Highlight: 拒绝废话，必须从代码逻辑中提取 3 个硬核技
 
 Auto-Mermaid: 自动生成项目架构的 Mermaid 流程图。
 
-One-Click Hackerize: 按钮触发，输出带有动态徽章（Shields.io）和标准黑客松模板的 Markdown。
+One-Click Hackerize: 按钮触发，输出带有动态徽章（Shields.io）和标准的 Markdown。
 
 Live Preview: 在侧边栏实时预览生成的 Markdown 效果。
 

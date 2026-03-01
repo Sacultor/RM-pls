@@ -1,0 +1,17 @@
+.vscode/**
+.vscode-test/**
+src/**
+webview/src/**
+out/**
+node_modules/**
+.gitignore
+**/*.map
+**/*.ts
+tsconfig.json
+webpack.config.js
+README.md
+plan.md
+profile.md
+traeprompt
+future.md
+.tasks/**

@@ -1,0 +1,68 @@
+{
+  "name": "rm-pls",
+  "displayName": "RM-pls: AI-Powered README Generator",
+  "description": "AI-native documentation automation agent for generating high-quality README.md files",
+  "version": "0.0.1",
+  "publisher": "rm-pls",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:rmPlsSidebar"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "rm-pls-sidebar",
+          "title": "ReadMe First",
+          "icon": "assets/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "rm-pls-sidebar": [
+        {
+          "type": "webview",
+          "id": "rmPlsSidebar",
+          "name": "ReadMe First"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "rmPls.generate",
+        "title": "Generate README"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "18.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.47.0",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "glob": "^10.3.3"
+  }
+}
