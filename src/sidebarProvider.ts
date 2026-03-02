@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
+import { generateReadme, ReadmeStyle } from './generator/readmeGenerator';
+import { scanProject } from './scanner/projectScanner';
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
     public static readonly viewType = 'rmPlsSidebar';
     private _view?: vscode.WebviewView;
+    private _latestReadme = '';
 
     constructor(private readonly _extensionUri: vscode.Uri) {}
 
@@ -23,14 +26,50 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         webviewView.webview.onDidReceiveMessage(async (data) => {
             switch (data.command) {
                 case 'generate':
-                    vscode.window.showInformationMessage('Generating README...');
+                    await this.generateAndPreview(data.style);
                     break;
                 case 'copy':
-                    vscode.env.clipboard.writeText(data.text);
+                    await vscode.env.clipboard.writeText(data.text || this._latestReadme);
                     vscode.window.showInformationMessage('README copied to clipboard!');
                     break;
             }
         });
+    }
+
+    private async generateAndPreview(style: ReadmeStyle): Promise<void> {
+        try {
+            const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+            if (!workspaceFolder) {
+                this.postMessage({
+                    command: 'error',
+                    text: 'No workspace folder found. Please open a project folder first.'
+                });
+                return;
+            }
+
+            const project = await scanProject(workspaceFolder.uri.fsPath);
+            const markdown = generateReadme(project, style || 'hacker');
+            this._latestReadme = markdown;
+
+            this.postMessage({
+                command: 'updateMarkdown',
+                text: markdown
+            });
+            vscode.window.showInformationMessage('README generated successfully.');
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unknown error';
+            this.postMessage({
+                command: 'error',
+                text: `Failed to generate README: ${message}`
+            });
+            vscode.window.showErrorMessage('README generation failed.');
+        }
+    }
+
+    private postMessage(message: unknown): void {
+        if (this._view) {
+            this._view.webview.postMessage(message);
+        }
     }
 
     private _getHtmlForWebview(webview: vscode.Webview): string {
@@ -194,6 +233,24 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 command: 'copy',
                 text: previewArea.innerText
             });
+        });
+
+        window.addEventListener('message', (event) => {
+            const message = event.data;
+            switch (message.command) {
+                case 'updateMarkdown':
+                    loading.style.display = 'none';
+                    previewArea.style.display = 'block';
+                    previewArea.style.whiteSpace = 'pre-wrap';
+                    previewArea.textContent = message.text || '';
+                    break;
+                case 'error':
+                    loading.style.display = 'none';
+                    previewArea.style.display = 'block';
+                    previewArea.style.whiteSpace = 'normal';
+                    previewArea.textContent = message.text || 'Failed to generate README.';
+                    break;
+            }
         });
     </script>
 </body>
