@@ -7,7 +7,7 @@ const Header: React.FC = () => {
                 <rect width="24" height="24" rx="4" fill="#6366F1"/>
                 <path d="M6 8h12M6 12h12M6 16h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <div className="title">ReadMe First</div>
+            <div className="title">RM-pls</div>
         </div>
     );
 };
